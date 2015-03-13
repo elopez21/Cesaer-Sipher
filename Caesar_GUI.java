@@ -18,10 +18,10 @@ import javax.swing.ScrollPaneConstants;
  *	@author Invisible	Computer, JTN
  *	@Modification:	Emily	Lopez
  */
-public class CaesarGUI extends JFrame implements ActionListener {
+public class Caesar_GUI extends JFrame implements ActionListener {
  
 		  private static final long serialVersionUID	= 1L;
-		  private static String	alphabet	= " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		  private static String	alphabet	= " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		  private JTextField	shiftFactor;
 		  private JTextArea inputTA;
 		  private JTextArea outputTA;
@@ -30,7 +30,7 @@ public class CaesarGUI extends JFrame implements ActionListener {
 		  /* @param	args */
 		  public	static void	main(String[] args)
 		  {
-				new CaesarGUI().setVisible(true);
+				new Caesar_GUI().setVisible(true);
 		  }
 		 
 		  public	void encryptText() throws InterruptedException
@@ -50,7 +50,7 @@ public class CaesarGUI extends JFrame implements ActionListener {
 				{
 					if(Integer.parseInt(textNum)%53 < 27)
                {
-                  shift	= Integer.parseInt(textNum)%53;
+                  shift	= Integer.parseInt(textNum)%63;
                }
                else
                {
@@ -69,32 +69,56 @@ public class CaesarGUI extends JFrame implements ActionListener {
                {
                    if(shift + i < 27)
                    {
-                     alphaMap.put(alphabet.charAt(i),alphabet.charAt((i+shift)%53));
+                     alphaMap.put(alphabet.charAt(i),alphabet.charAt((i+shift)%63));
                    }
                    else
                    {
                      nI = (i + shift) - 26;
-                     alphaMap.put(alphabet.charAt(i),alphabet.charAt((nI%53)));
+                     alphaMap.put(alphabet.charAt(i),alphabet.charAt((nI%63)));
                    }
                }
                else if((i > 26) && (i  <= 52))
                {
                   if(shift + i <= 52)
                   {
-                     alphaMap.put(alphabet.charAt(i),	alphabet.charAt((i+shift)%53));
+                     alphaMap.put(alphabet.charAt(i),	alphabet.charAt((i+shift)%63));
                   }
                   else
                   {
                      nI = ((shift + i) - 26);
-                     alphaMap.put(alphabet.charAt(i),alphabet.charAt((nI%53)));
+                     alphaMap.put(alphabet.charAt(i),alphabet.charAt((nI%63)));
                    }  
                 }
-   			   else
+   			   else if(i > 52 && i <= 62)
                {
-                  alphaMap.put(alphabet.charAt(i),	alphabet.charAt((i)));
+                  if(shift + i <= 62)
+                  {
+                     alphaMap.put(alphabet.charAt(i),	alphabet.charAt((i+shift)%63));
+                  }
+                  else if((shift + i > 62) && (shift  + i <= 72)) 
+                  {
+                     nI =(shift + i) - 10;
+                     alphaMap.put(alphabet.charAt(i),alphabet.charAt((nI%63)));
+                  }
+                   else if((shift + i > 72) && (shift  + i <= 82))
+                  {
+                     nI =(shift + i) - 20;
+                     alphaMap.put(alphabet.charAt(i), alphabet.charAt((nI%63))); 
+                  }
+                  else
+                  {
+                     nI =(shift + i) - 30;
+                     alphaMap.put(alphabet.charAt(i),alphabet.charAt((nI%63)));
+                  }
+                               
                }
+               else
+               {
+                   alphaMap.put(alphabet.charAt(i),alphabet.charAt((i)));
+               }
+            }   
           
-            }
+            
 					 
            
             //Get input text	
@@ -105,7 +129,8 @@ public class CaesarGUI extends JFrame implements ActionListener {
 				for(int	j=0; j<inputText.length();	j++)
             {
 					outputText = outputText.concat(alphaMap.get(inputText.charAt(j)).toString());
-				}
+				   
+            }
 				//Output the encrypted	text
 				outputTA.setText(outputText);
 		  }
@@ -119,7 +144,7 @@ public class CaesarGUI extends JFrame implements ActionListener {
 					 String textNum =	this.shiftFactor.getText();
 					 if(!textNum.equals(""))
                 {
-								shift	= Integer.parseInt(textNum)%53;
+								shift	= Integer.parseInt(textNum)%63;
 					 }
 					 else
                 {
@@ -132,27 +157,53 @@ public class CaesarGUI extends JFrame implements ActionListener {
                   {
                      if (shift + i <= 26)
                      {
-                        alphaMap.put(alphabet.charAt((i+shift)%53), alphabet.charAt(i));
+                        alphaMap.put(alphabet.charAt((i+shift)%63), alphabet.charAt(i));
                      }
                      else
                      {
                         nI = shift + i - 26;
-                        alphaMap.put(alphabet.charAt((nI%53)),alphabet.charAt(i));
-                      }
-                    }
+                        alphaMap.put(alphabet.charAt((nI%63)),alphabet.charAt(i));
+                     }
+                  }
                   else if((i > 26) && (i  <= 52))
                   {
                      if(shift + i <= 52)
                      {
-                        alphaMap.put(alphabet.charAt((i+shift)%53), alphabet.charAt(i));
+                        alphaMap.put(alphabet.charAt((i+shift)%63), alphabet.charAt(i));
                      }
                      else
                      {                        
                         nI = ((shift + i) - 26);
-                        alphaMap.put(alphabet.charAt((nI%53)), alphabet.charAt(i));
-                      }  
-                   }
-   			      else
+                        alphaMap.put(alphabet.charAt((nI%63)), alphabet.charAt(i));
+                     }  
+                  }
+   			      
+                 else if(i > 52 && i <= 62)
+                 {
+                     int c = shift + i;
+                     
+                     if(c <= 62)
+                     {
+                        alphaMap.put(alphabet.charAt((i+shift)%63), alphabet.charAt(i));
+                     }
+                     else if((c > 62) && (c <= 72)) 
+                     {
+                        nI = c - 10;
+                        alphaMap.put(alphabet.charAt((nI%63)), alphabet.charAt(i));
+                     }
+                     else if((c > 72) && (c <= 82))
+                     {
+                        nI = c - 20;
+                        alphaMap.put(alphabet.charAt((nI%63)), alphabet.charAt(i)); 
+                     }
+                     else
+                     {
+                        nI = c - 30;
+                        alphaMap.put(alphabet.charAt((nI%63)), alphabet.charAt(i));
+                     }
+                  
+                  }
+                  else
                   {
                      alphaMap.put(alphabet.charAt(i),alphabet.charAt((i)));
                   }
@@ -171,7 +222,7 @@ public class CaesarGUI extends JFrame implements ActionListener {
 					 outputTA.setText(outputText);
 		  }
 		 
-		  public	CaesarGUI(){
+		  public	Caesar_GUI(){
 					 setTitle("Caesar Cipher");
 				setVisible(true);
 				setDefaultCloseOperation(3);
@@ -229,3 +280,4 @@ public class CaesarGUI extends JFrame implements ActionListener {
 							 }
 		  }
 }
+
